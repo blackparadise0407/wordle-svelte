@@ -7,5 +7,13 @@ declare global {
   }
 
   type TBoard = Array<Array<ICell>>;
+
+  interface IToast {
+    id: string;
+    message: string;
+  }
+  interface IToastState {
+    toasts: Array<IToast>;
+  }
 }
 export {};

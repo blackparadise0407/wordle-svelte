@@ -17,10 +17,8 @@
   .cell {
     display: grid;
     place-content: center;
-    width: var(--size);
-    height: var(--size);
     border-radius: 8px;
-    font-size: 2em;
+    font-size: var(--font-size);
     text-transform: uppercase;
     font-weight: 700;
     border: 2px solid #e6e5e5;
@@ -31,8 +29,8 @@
   }
 
   .cell--present {
-    background-color: #dda844;
-    border-color: #dda844;
+    background-color: #ffbc00;
+    border-color: #ffbc00;
   }
 
   .cell--absent {
@@ -41,7 +39,7 @@
   }
 
   .cell--correct {
-    background-color: #1daa1d;
-    border-color: #1daa1d;
+    background-color: #2dbd2d;
+    border-color: #2dbd2d;
   }
 </style>

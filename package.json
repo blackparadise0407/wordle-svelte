@@ -21,6 +21,9 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
-    "clsx": "^1.1.1"
+    "@types/uuid": "^8.3.4",
+    "clsx": "^1.1.1",
+    "query-string": "^7.1.1",
+    "uuid": "^8.3.2"
   }
 }

@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
 
-  import Cell from "@/lib/Cell.svelte";
   import { checkWin, deepClone2DArray } from "@/helpers";
   import { wordList } from "@/helpers/wordList";
+  import Cell from "@/lib/Cell.svelte";
+  import { enqueue } from "@/store/toast";
 
   const testWord = "world";
-
-  let errorRef: HTMLDivElement;
 
   const ROW_LIMIT = 6;
   const WORD_LENGTH = testWord.length;
@@ -15,18 +14,19 @@
   let board: TBoard = Array(ROW_LIMIT).fill(
     Array<ICell>(WORD_LENGTH).fill({ letter: "", eval: undefined })
   );
-  let error: string = "";
+  let gameEnd = false;
   const pattern = new RegExp(/[a-zA-Z]/);
 
   let currentRow = 0;
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (gameEnd) return;
     const { key } = e;
     const clone = deepClone2DArray<TBoard>(board);
     // Press Enter key
     if (key === "Enter") {
       if (board[currentRow].some((c) => !c.letter)) {
-        console.log("Not enough letter");
+        enqueue("Not enough letters");
       } else {
         // Check exist in common word list
         const word = board[currentRow]
@@ -35,10 +35,7 @@
           .toLowerCase();
 
         if (!wordList.includes(word)) {
-          error = "Not in word list!";
-          setTimeout(() => {
-            error = "";
-          }, 3000);
+          enqueue("Not in word list!");
           return;
         }
         // Check win
@@ -53,6 +50,11 @@
         if (res.every((c) => c === "correct")) {
           // WIN CMNR
           console.log("WIN CMNR, CHOI GI NUA");
+          return;
+        }
+        if (currentRow === ROW_LIMIT - 1) {
+          enqueue(testWord);
+          gameEnd = true;
           return;
         }
         currentRow++;
@@ -87,7 +89,6 @@
             letter: key,
           };
           board = clone;
-          console.log(board);
           return;
         }
       }
@@ -104,9 +105,6 @@
 </script>
 
 <template>
-  {#if !!error}
-    <div bind:this={errorRef} class="error">{error}</div>
-  {/if}
   <div
     class="board"
     style={`--row-limit: ${ROW_LIMIT}; --word-len: ${WORD_LENGTH}`}
@@ -122,6 +120,7 @@
 <style>
   :root {
     --size: 70px;
+    --font-size: 2em;
   }
 
   .board {
@@ -131,27 +130,10 @@
     grid-template-rows: repeat(var(--row-limit), var(--size));
   }
 
-  .error {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: 500;
-    background-color: #fff;
-    box-shadow: 0 0 10px -5px #000;
-    transform: translate(-50%, -50%);
-    animation: appear 0.4s linear;
-  }
-
-  @keyframes appear {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -100px);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%);
+  @media only screen and (max-width: 600px) {
+    :root {
+      --size: 50px;
+      --font-size: 1.6em;
     }
   }
 </style>
