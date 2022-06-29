@@ -29,16 +29,19 @@
   }
 
   .cell--present {
+    color: #fff;
     background-color: #ffbc00;
     border-color: #ffbc00;
   }
 
   .cell--absent {
+    color: #fff;
     background-color: #ddd;
     border-color: #ddd;
   }
 
   .cell--correct {
+    color: #fff;
     background-color: #2dbd2d;
     border-color: #2dbd2d;
   }

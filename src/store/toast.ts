@@ -3,11 +3,12 @@ import { writable } from "svelte/store";
 
 export const toastStore = writable<IToastState>({ toasts: [] });
 
-export const enqueue = (message: string) =>
+export const enqueue = (message: string, opts: IToastOptions = {}) =>
   toastStore.update((state) => {
     const toast: IToast = {
       id: v4(),
       message,
+      variant: opts.variant,
     };
     state.toasts.push(toast);
     return state;

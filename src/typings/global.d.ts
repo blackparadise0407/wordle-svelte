@@ -8,12 +8,22 @@ declare global {
 
   type TBoard = Array<Array<ICell>>;
 
-  interface IToast {
+  type TToastVariant = "success" | "error";
+  interface IToastOptions {
+    variant?: TToastVariant;
+  }
+
+  interface IToast extends Pick<IToastOptions, "variant"> {
     id: string;
     message: string;
   }
+
   interface IToastState {
     toasts: Array<IToast>;
+  }
+
+  interface IGameState {
+    score: number;
   }
 }
 export {};

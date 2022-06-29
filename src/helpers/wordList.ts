@@ -9079,3 +9079,15 @@ export const wordList = [
   "scrap",
   "final",
 ];
+
+export const congratsWordList = [
+  "Great job",
+  "Awesome",
+  "Perfect",
+  "Good work",
+  "Keep it up",
+  "Fantastic",
+  "Way to go",
+  "Hooray",
+  "Bravo",
+];

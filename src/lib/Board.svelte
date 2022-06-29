@@ -1,45 +1,68 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { afterUpdate, onDestroy, onMount } from "svelte";
 
-  import { checkWin, deepClone2DArray } from "@/helpers";
-  import { wordList } from "@/helpers/wordList";
+  import { checkWin, deepClone2DArray, generateBoard } from "@/helpers";
+  import { wordList, congratsWordList } from "@/helpers/wordList";
   import Cell from "@/lib/Cell.svelte";
   import { enqueue } from "@/store/toast";
+  import { gameStore } from "@/store/game";
 
-  const testWord = "world";
+  export let target = "";
+  export let onNextWord: () => void = () => {};
 
   const ROW_LIMIT = 6;
-  const WORD_LENGTH = testWord.length;
+  const WORD_LENGTH = target.length;
 
-  let board: TBoard = Array(ROW_LIMIT).fill(
-    Array<ICell>(WORD_LENGTH).fill({ letter: "", eval: undefined })
-  );
+  let board: TBoard = generateBoard(ROW_LIMIT, WORD_LENGTH);
   let gameEnd = false;
+  let gameLost = false;
+
   const pattern = new RegExp(/[a-zA-Z]/);
 
   let currentRow = 0;
 
+  const resetGame = () => {
+    gameEnd = false;
+    board = generateBoard(ROW_LIMIT, WORD_LENGTH);
+    currentRow = 0;
+    onNextWord();
+    if (gameLost) {
+      gameStore.update((s) => {
+        s.score = 0;
+        return s;
+      });
+      gameLost = false;
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (gameEnd) return;
     const { key } = e;
+
+    if (gameEnd && key !== "Enter") return;
+
     const clone = deepClone2DArray<TBoard>(board);
     // Press Enter key
     if (key === "Enter") {
-      if (board[currentRow].some((c) => !c.letter)) {
-        enqueue("Not enough letters");
+      if (gameEnd) {
+        resetGame();
+        return;
+      }
+
+      if (clone[currentRow].some((c) => !c.letter)) {
+        enqueue("Not enough letters", { variant: "error" });
       } else {
         // Check exist in common word list
-        const word = board[currentRow]
+        const word = clone[currentRow]
           .map((cell) => cell.letter)
           .join("")
           .toLowerCase();
 
         if (!wordList.includes(word)) {
-          enqueue("Not in word list!");
+          enqueue("Not in word list!", { variant: "error" });
           return;
         }
         // Check win
-        const res = checkWin(board[currentRow], testWord);
+        const res = checkWin(clone[currentRow], target);
         clone[currentRow].forEach((cell, cellIdx) => {
           clone[currentRow][cellIdx] = {
             ...cell,
@@ -48,13 +71,21 @@
         });
         board = clone;
         if (res.every((c) => c === "correct")) {
-          // WIN CMNR
-          console.log("WIN CMNR, CHOI GI NUA");
+          const idx =
+            Math.floor(Math.random() * 100) % (congratsWordList.length - 1);
+          enqueue(congratsWordList[idx] + "!", { variant: "success" });
+          gameEnd = true;
+          gameStore.update((s) => {
+            s.score += 1;
+            return s;
+          });
           return;
         }
         if (currentRow === ROW_LIMIT - 1) {
-          enqueue(testWord);
+          enqueue(target);
           gameEnd = true;
+          gameLost = true;
+
           return;
         }
         currentRow++;
@@ -99,6 +130,13 @@
     document.addEventListener("keydown", handleKeyDown);
   });
 
+  // Log the word in dev mode for easier debug
+  afterUpdate(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(target);
+    }
+  });
+
   onDestroy(() => {
     document.removeEventListener("keydown", handleKeyDown);
   });
@@ -115,6 +153,11 @@
       {/each}
     {/each}
   </div>
+  {#if gameEnd}
+    <button class="primary" on:click={resetGame}
+      >{gameLost ? "Restart" : "Next word?"}</button
+    >
+  {/if}
 </template>
 
 <style>
@@ -128,6 +171,10 @@
     gap: 10px;
     grid-template-columns: repeat(var(--word-len), var(--size));
     grid-template-rows: repeat(var(--row-limit), var(--size));
+  }
+
+  button {
+    margin-top: 20px;
   }
 
   @media only screen and (max-width: 600px) {

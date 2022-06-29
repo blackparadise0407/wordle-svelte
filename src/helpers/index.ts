@@ -36,3 +36,6 @@ export const randomNoRepeats = (array: string[]) => {
     return item;
   };
 };
+
+export const generateBoard = (rows: number, cols: number) =>
+  Array(rows).fill(Array<ICell>(cols).fill({ letter: "", eval: undefined }));
