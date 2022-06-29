@@ -3,6 +3,9 @@
 # abort on errors
 set -e
 
+# clean build output directory
+rm -rf dist
+
 # build
 npm run build
 
@@ -12,6 +15,8 @@ cd dist
 # if you are deploying to a custom domain
 # echo 'www.example.com' > CNAME
 
+git init
+git checkout -b main
 git add -A
 git commit -m 'deploy'
 
