@@ -16,20 +16,14 @@
       {/each}
     {/each}
   </div>
-
-  <div class="keyboard-container" />
 </template>
 
 <style>
   .board {
     display: grid;
     margin: 0 auto;
-    gap: 10px;
+    gap: var(--gap);
     grid-template-columns: repeat(var(--word-len), var(--size));
     grid-template-rows: repeat(var(--row-limit), var(--size));
-  }
-
-  .keyboard-container {
-    margin-top: 80px;
   }
 </style>

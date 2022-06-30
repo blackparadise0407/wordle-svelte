@@ -185,7 +185,8 @@
 
   @media only screen and (max-width: 600px) {
     :root {
-      --size: 40px;
+      --size: 50px;
+      --gap: 5px;
       --font-size: 1.6em;
     }
   }

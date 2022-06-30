@@ -1,5 +1,6 @@
 :root {
   --size: 70px;
+  --gap: 10px;
   --font-size: 2em;
   --absent: #ddd;
   --present: #ffbc00;

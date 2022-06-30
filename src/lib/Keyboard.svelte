@@ -106,7 +106,7 @@
       gap: 2px;
     }
     .keyboard__key {
-      padding: 5px 10px;
+      padding: 5px;
     }
   }
 </style>
