@@ -50,3 +50,7 @@ button.primary:focus,
 button.primary:focus-visible {
   outline: 3px solid #ecb7b7;
 }
+
+.flex-grow {
+  flex-grow: 1;
+}

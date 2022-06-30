@@ -27,7 +27,10 @@ declare global {
   }
 
   interface IKeyDown {
-    (key: string, enterCallback?: (row: ICell[]) => void): void;
+    (
+      key: string,
+      enterCallback?: (row: ICell[], isGameEnd?: boolean) => void
+    ): void;
   }
 }
 export {};

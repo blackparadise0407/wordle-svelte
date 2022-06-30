@@ -1375,8 +1375,6 @@ export const wordList = [
   "inlaw",
   "nazis",
   "bogle",
-  "frcvs",
-  "nivkh",
   "rammy",
   "cadet",
   "hinge",
@@ -9090,4 +9088,5 @@ export const congratsWordList = [
   "Way to go",
   "Hooray",
   "Bravo",
+  "Best of the best",
 ];

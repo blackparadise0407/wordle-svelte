@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterUpdate, onDestroy, onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   import { keyRows } from "@/constant/keyboard";
 
@@ -8,7 +8,11 @@
   let pressedKeys: { [key: string]: TCellEvaluation } = {};
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    onKeyPress(e.key, (row) => {
+    onKeyPress(e.key, (row, isGameEnd) => {
+      if (isGameEnd) {
+        pressedKeys = {};
+        return;
+      }
       row.forEach(({ letter, eval: cEval }) => {
         if (!pressedKeys[letter]) {
           pressedKeys[letter] = cEval;
@@ -19,10 +23,6 @@
 
   onMount(() => {
     document.addEventListener("keydown", handleKeyDown);
-  });
-
-  afterUpdate(() => {
-    console.log(pressedKeys);
   });
 
   onDestroy(() => {
@@ -65,7 +65,7 @@
 
   .keyboard__key {
     padding: 10px 15px;
-    min-width: 50px;
+    min-width: 30px;
     border-radius: 4px;
     color: #fff;
     background-color: #4b4242;
@@ -95,5 +95,18 @@
 
   .keyboard__key:active {
     transform: scale(0.95);
+  }
+
+  @media only screen and (max-width: 600px) {
+    .keyboard {
+      row-gap: 2px;
+    }
+
+    .keyboard__row {
+      gap: 2px;
+    }
+    .keyboard__key {
+      padding: 5px 10px;
+    }
   }
 </style>
