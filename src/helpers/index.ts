@@ -6,23 +6,22 @@ export const checkWin = (
   row: ICell[],
   target: string
 ): Array<TCellEvaluation> => {
-  console.time("checkWin");
-  const lowerTarget = target.toLowerCase();
+  const upperTarget = target.toUpperCase();
   const rowLen = row.length;
 
   const result: Array<TCellEvaluation> = [];
 
-  const remainTargetChar = Array.from(lowerTarget);
+  const remainTargetChar = Array.from(upperTarget);
 
   for (let idx = 0; idx < rowLen; idx++) {
-    const letter = row[idx].letter.toLowerCase();
+    const letter = row[idx].letter.toUpperCase();
     const remainTargetCharIdx = remainTargetChar.findIndex((c) => c === letter);
 
-    if (letter === lowerTarget[idx]) {
+    if (letter === upperTarget[idx]) {
       result.push("correct");
       remainTargetChar.splice(remainTargetCharIdx, 1);
     } else if (
-      lowerTarget.includes(letter) &&
+      upperTarget.includes(letter) &&
       remainTargetChar.includes(letter)
     ) {
       result.push("present");
@@ -31,7 +30,6 @@ export const checkWin = (
       result.push("absent");
     }
   }
-  console.timeEnd("checkWin");
 
   return result;
 };

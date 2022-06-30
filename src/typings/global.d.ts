@@ -25,5 +25,9 @@ declare global {
   interface IGameState {
     score: number;
   }
+
+  interface IKeyDown {
+    (key: string, enterCallback?: (row: ICell[]) => void): void;
+  }
 }
 export {};
