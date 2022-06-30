@@ -42,7 +42,11 @@
             class:keyboard__key--correct={pressedKeys?.[key] === "correct"}
             on:click={() => onKeyPress(key)}
           >
-            {key}
+            {#if key === "Backspace"}
+              ⌫
+            {:else}
+              {key}
+            {/if}
           </div>
         {/each}
       </div>
@@ -106,7 +110,7 @@
       gap: 2px;
     }
     .keyboard__key {
-      padding: 5px;
+      padding: 6px 10px;
     }
   }
 </style>
