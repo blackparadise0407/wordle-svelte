@@ -30,19 +30,19 @@
 
   .cell--present {
     color: #fff;
-    background-color: #ffbc00;
-    border-color: #ffbc00;
+    background-color: var(--present);
+    border-color: var(--present);
   }
 
   .cell--absent {
     color: #fff;
-    background-color: #ddd;
-    border-color: #ddd;
+    background-color: var(--absent);
+    border-color: var(--absent);
   }
 
   .cell--correct {
     color: #fff;
-    background-color: #2dbd2d;
-    border-color: #2dbd2d;
+    background-color: var(--correct);
+    border-color: var(--correct);
   }
 </style>

@@ -1,3 +1,11 @@
+:root {
+  --size: 70px;
+  --font-size: 2em;
+  --absent: #ddd;
+  --present: #ffbc00;
+  --correct: #2dbd2d;
+}
+
 *,
 *::before,
 *::after {

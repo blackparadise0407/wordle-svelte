@@ -6,6 +6,7 @@
   import Cell from "@/lib/Cell.svelte";
   import { enqueue } from "@/store/toast";
   import { gameStore } from "@/store/game";
+  import Keyboard from "./Keyboard.svelte";
 
   export let target = "";
   export let onNextWord: () => void = () => {};
@@ -35,9 +36,7 @@
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    const { key } = e;
-
+  const handleKeyDown: IKeyDown = (key, cb) => {
     if (gameEnd && key !== "Enter") return;
 
     const clone = deepClone2DArray<TBoard>(board);
@@ -69,6 +68,7 @@
             eval: res[cellIdx],
           };
         });
+        cb(clone[currentRow]);
         board = clone;
         if (res.every((c) => c === "correct")) {
           const idx =
@@ -117,7 +117,7 @@
         if (!clone[currentRow][currCell].letter) {
           clone[currentRow][currCell] = {
             ...clone[currentRow][currCell],
-            letter: key,
+            letter: key.toUpperCase(),
           };
           board = clone;
           return;
@@ -126,19 +126,11 @@
     }
   };
 
-  onMount(() => {
-    document.addEventListener("keydown", handleKeyDown);
-  });
-
   // Log the word in dev mode for easier debug
   afterUpdate(() => {
     if (process.env.NODE_ENV === "development") {
       console.log(target);
     }
-  });
-
-  onDestroy(() => {
-    document.removeEventListener("keydown", handleKeyDown);
   });
 </script>
 
@@ -158,16 +150,16 @@
       >{gameLost ? "Restart" : "Next word?"}</button
     >
   {/if}
+
+  <div class="keyboard-container">
+    <Keyboard onKeyPress={handleKeyDown} />
+  </div>
 </template>
 
 <style>
-  :root {
-    --size: 70px;
-    --font-size: 2em;
-  }
-
   .board {
     display: grid;
+    margin: 0 auto;
     gap: 10px;
     grid-template-columns: repeat(var(--word-len), var(--size));
     grid-template-rows: repeat(var(--row-limit), var(--size));
@@ -175,6 +167,10 @@
 
   button {
     margin-top: 20px;
+  }
+
+  .keyboard-container {
+    margin-top: 80px;
   }
 
   @media only screen and (max-width: 600px) {
