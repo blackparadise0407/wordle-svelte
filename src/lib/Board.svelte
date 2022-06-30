@@ -148,7 +148,7 @@
     style={`--row-limit: ${ROW_LIMIT}; --word-len: ${WORD_LENGTH}`}
   >
     {#each board as rows}
-      {#each rows as cell}
+      {#each rows as cell, idx (idx)}
         <Cell data={cell} />
       {/each}
     {/each}

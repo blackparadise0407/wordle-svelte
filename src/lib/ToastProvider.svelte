@@ -3,11 +3,15 @@
   import Toast from "./Toast.svelte";
 </script>
 
-<div class="toast-provider">
-  {#each $toastStore.toasts as toast (toast.id)}
-    <Toast data={toast} />
-  {/each}
-</div>
+<template>
+  {#if $toastStore.toasts.length > 0}
+    <div class="toast-provider">
+      {#each $toastStore.toasts as toast (toast.id)}
+        <Toast data={toast} />
+      {/each}
+    </div>
+  {/if}
+</template>
 
 <style>
   .toast-provider {
