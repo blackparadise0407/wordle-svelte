@@ -23,7 +23,7 @@
 </script>
 
 <main>
-  <h1>Worlde Svelte</h1>
+  <h1>Wordle Svelte</h1>
   <Score />
   {#if !!word}
     <Board target={word} onNextWord={handleRandomNextWord} />
